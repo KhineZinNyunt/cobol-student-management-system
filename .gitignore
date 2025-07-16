@@ -1,0 +1,4 @@
+"*.exe" 
+"*.dat"    # Exclude data files (if they shouldn't be tracked)
+"*.bin"    # Exclude compiled binaries
+"*.exe" 

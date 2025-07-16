@@ -92,9 +92,6 @@ LINKAGE SECTION.
 PROCEDURE DIVISION  USING LS-SEMESTER.
 MAIN-LOGIC.
     MOVE LS-SEMESTER TO WS-SEMESTER.
-    IF WS-SEMESTER NOT = 1 AND WS-SEMESTER NOT = 2
-        DISPLAY "Invalid semester. Only 1 or 2 allowed."
-    END-IF.
     PERFORM GET-STUDENT-COUNT
     PERFORM OPEN-FILE-AND-GET-LAST-ID
 
@@ -111,13 +108,13 @@ MAIN-LOGIC.
     PERFORM APPEND-TEMP-TO-ORIGINAL
     DISPLAY "Insertion complete. Records added to semester " WS-SEMESTER " file."
     EXIT PROGRAM.
-GET-SEMESTER.
-    DISPLAY "Enter semester to insert records (1 or 2): "
-    ACCEPT WS-SEMESTER
-    IF WS-SEMESTER NOT = 1 AND WS-SEMESTER NOT = 2
-        DISPLAY "Invalid semester. Only 1 or 2 allowed."
-        PERFORM GET-SEMESTER
-    END-IF.
+*> GET-SEMESTER.
+    *> DISPLAY "Enter semester to insert records (1 or 2): "
+    *> ACCEPT WS-SEMESTER
+    *> IF WS-SEMESTER NOT = 1 AND WS-SEMESTER NOT = 2
+        *> DISPLAY "Invalid semester. Only 1 or 2 allowed."
+        *> PERFORM GET-SEMESTER
+    *> END-IF.
 GET-STUDENT-COUNT.
     DISPLAY "Enter number of students to insert (1-999): "
     ACCEPT WS-STUDENT-COUNT
@@ -127,7 +124,7 @@ GET-STUDENT-COUNT.
     END-IF.
 
 OPEN-FILE-AND-GET-LAST-ID.
-    IF WS-SEMESTER= 1
+    IF LS-SEMESTER= 1
         OPEN INPUT STUDENT-FILE-SEM1
         IF FILE-STATUS-SEM1 NOT = "00"
             DISPLAY "Creating new semester 1 file"

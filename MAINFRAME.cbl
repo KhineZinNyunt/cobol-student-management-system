@@ -203,13 +203,11 @@ VALIDATE-MANAGE-CHOICE.
     END-IF.
 
 ADD-RECORD.
-    DISPLAY "Enter semester to insert records (1 or 2): "
-    ACCEPT WS-SEMESTER
-    call "INSERT" using WS-SEMESTER.
-    DISPLAY "Record added successfully."
-    DISPLAY "Displaying updated records..."
-    CALL "VIEW" USING WS-SEMESTER
-    PERFORM ASK-TO-CONTINUE.
+        CALL "INSERT" USING WS-SEMESTER
+        DISPLAY "Record added successfully."
+        DISPLAY "Displaying updated records..."
+        CALL "VIEW" USING WS-SEMESTER
+        PERFORM ASK-TO-CONTINUE.
 
 EDIT-RECORD-PROCESS.
     *> Get student ID to edit

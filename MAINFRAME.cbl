@@ -214,33 +214,21 @@ EDIT-RECORD-PROCESS.
     DISPLAY "Enter Student ID to Edit: "
     ACCEPT WS-ID-EDIT
 
-    *> Validate semester input
-    PERFORM VALIDATE-SEMESTER-INPUT
-
-    IF IS-VALID-SEMESTER
-        *> Initialize return code
-        MOVE 'N' TO WS-EDIT-RETURN-CODE
-
-        *> Call edit program with three parameters:
-        *> 1. Student ID to edit (WS-ID-EDIT)
-        *> 2. Semester (WS-SEMESTER)
-        *> 3. Return code (WS-EDIT-RETURN-CODE)
         CALL 'EDIT' USING
             BY CONTENT WS-ID-EDIT,
             BY CONTENT WS-SEMESTER,
             BY REFERENCE WS-EDIT-RETURN-CODE
 
         IF EDIT-SUCCESS
-            DISPLAY "Record edited successfully."
+            *> DISPLAY "Record edited successfully."
             *> After successful edit, regenerate ranked files
             DISPLAY "Updating ranked results..."
             CALL "VIEW" USING WS-SEMESTER
         ELSE
             DISPLAY "Student not found in Semester " WS-SEMESTER
         END-IF
-    ELSE
-        DISPLAY "Invalid semester. Please enter 1 or 2."
-    END-IF.
+
+
     PERFORM ASK-TO-CONTINUE.
 
 SEARCH-RECORD-PROCESS.

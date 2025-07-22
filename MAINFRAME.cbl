@@ -104,17 +104,29 @@ WORKING-STORAGE SECTION.
     05 WS-TEMP-MARKS     OCCURS 6 TIMES PIC 999.
     05 WS-TEMP-TOTAL     PIC 9(4).
     05 WS-TEMP-GRADE     PIC X.
-
+01  ESCAPE-CHAR          PIC X VALUE X'1B'.
+01  COLOR-CODES.
+           05  ESC             PIC X    VALUE X'1B'.
+           05  COLOR-RESET     PIC X(3) VALUE '[0m'.
+           05  COLOR-RED       PIC X(4) VALUE '[31m'.
+           05  COLOR-GREEN     PIC X(4) VALUE '[32m'.
+           05  COLOR-YELLOW    PIC X(4) VALUE '[33m'.
+           05  COLOR-BLUE      PIC X(4) VALUE '[34m'.
+           05  COLOR-MAGENTA   PIC X(4) VALUE '[35m'.
+           05  COLOR-CYAN      PIC X(4) VALUE '[36m'.
+           05  COLOR-WHITE     PIC X(4) VALUE '[37m'.
+           05  COLOR-BOLD      PIC X(3) VALUE '[1m'.
 PROCEDURE DIVISION.
 BEGIN.
     PERFORM UNTIL WS-NUMERIC-CHOICE = 4
-        DISPLAY "---------------------------------------------------------"
-        DISPLAY "Student Management System"
-        DISPLAY "1. Manage Records"
-        DISPLAY "2. View Reports"
-        DISPLAY "3. Search Record"
-        DISPLAY "4. Exit"
-        DISPLAY "Enter your choice (1-4): "
+        DISPLAY ESC COLOR-CYAN "***************************"ESC COLOR-RESET
+        DISPLAY ESC COLOR-BOLD"*Student Record Management System*"ESC COLOR-RESET
+        DISPLAY ESC COLOR-CYAN"***************************"ESC COLOR-RESET
+        DISPLAY ESC COLOR-RED"1. "ESC COLOR-RESET "Manage Records"
+        DISPLAY ESC COLOR-RED"2. "ESC COLOR-RESET "View Reports"
+        DISPLAY ESC COLOR-RED"3. "ESC COLOR-RESET "Search Record"
+        DISPLAY ESC COLOR-RED"4. "ESC COLOR-RESET "Exit"
+        DISPLAY ESC COLOR-GREEN"Enter your choice (1-4): "ESC COLOR-RESET
         ACCEPT WS-CHOICE
 
         *> Validate main menu choice
@@ -154,39 +166,46 @@ MANAGE-RECORDS.
     MOVE 'N' TO WS-VALID-SEMESTER
 
     PERFORM UNTIL IS-VALID-MANAGE
-        DISPLAY "---------------------------------------------------------"
-        DISPLAY "Manage Records Menu"
-        DISPLAY "1. Add Record"
-        DISPLAY "2. Edit Record"
-        DISPLAY "3. Delete Record"
-        DISPLAY "Enter Manage Option (1-3): "
+        DISPLAY ESC COLOR-CYAN "---------------------------------------------------------" ESC COLOR-RESET
+        DISPLAY ESC COLOR-BOLD "Manage Records Menu" ESC COLOR-RESET
+        DISPLAY ESC COLOR-YELLOW "1. " ESC COLOR-RESET "Add Record"
+        DISPLAY ESC COLOR-YELLOW "2. " ESC COLOR-RESET "Edit Record"
+        DISPLAY ESC COLOR-YELLOW "3. " ESC COLOR-RESET "Delete Record"
+        DISPLAY ESC COLOR-YELLOW "4. " ESC COLOR-RESET "Back to Main Menu"
+        DISPLAY ESC COLOR-GREEN "Enter Manage Option (1-4): " ESC COLOR-RESET
         ACCEPT WS-MANAGE-CHOICE
 
         *> Validate manage menu choice
         PERFORM VALIDATE-MANAGE-CHOICE
 
         IF NOT IS-VALID-MANAGE
-            DISPLAY "Invalid option. Please enter 1-3."
+            DISPLAY "Invalid option. Please enter 1-4."
             DISPLAY "Press Enter to continue..."
             ACCEPT WS-CHOICE *> Pause
         ELSE
-            *> Reset semester flag before validation
-            MOVE 'N' TO WS-VALID-SEMESTER
-            PERFORM VALIDATE-SEMESTER-INPUT
+            *> Check if user selected "Back to Main Menu"
+            IF WS-NUMERIC-MANAGE = 4
+                MOVE 'Y' TO WS-VALID-MANAGE  *> Exit manage records menu
+                CONTINUE
+            ELSE
+                *> Reset semester flag before validation
+                MOVE 'N' TO WS-VALID-SEMESTER
+                PERFORM VALIDATE-SEMESTER-INPUT
 
             IF IS-VALID-SEMESTER
-                EVALUATE WS-NUMERIC-MANAGE
-                    WHEN 1
-                        PERFORM ADD-RECORD
-                    WHEN 2
-                        PERFORM EDIT-RECORD-PROCESS
-                    WHEN 3
-                        PERFORM DELETE-RECORD-PROCESS
-                END-EVALUATE
-            ELSE
-                DISPLAY "Invalid semester. Please enter 1 or 2."
-                DISPLAY "Press Enter to continue..."
-                ACCEPT WS-CHOICE *> Pause
+                    EVALUATE WS-NUMERIC-MANAGE
+                        WHEN 1
+                            PERFORM ADD-RECORD
+                        WHEN 2
+                            PERFORM EDIT-RECORD-PROCESS
+                        WHEN 3
+                            PERFORM DELETE-RECORD-PROCESS
+                    END-EVALUATE
+                ELSE
+                    DISPLAY "Invalid semester. Please enter 1 or 2."
+                    DISPLAY "Press Enter to continue..."
+                    ACCEPT WS-CHOICE *> Pause
+                END-IF
             END-IF
         END-IF
     END-PERFORM.
@@ -197,17 +216,21 @@ VALIDATE-MANAGE-CHOICE.
        WS-MANAGE-CHOICE(2:1) = SPACE AND
        WS-MANAGE-CHOICE(3:1) = SPACE
         MOVE WS-MANAGE-CHOICE(1:1) TO WS-NUMERIC-MANAGE
-        IF WS-NUMERIC-MANAGE >= 1 AND WS-NUMERIC-MANAGE <= 3
+        IF WS-NUMERIC-MANAGE >= 1 AND WS-NUMERIC-MANAGE <= 4  *> Changed to 4
             MOVE 'Y' TO WS-VALID-MANAGE
         END-IF
     END-IF.
 
 ADD-RECORD.
         CALL "INSERT" USING WS-SEMESTER
+    IF RETURN-CODE = 0
         DISPLAY "Record added successfully."
         DISPLAY "Displaying updated records..."
         CALL "VIEW" USING WS-SEMESTER
-        PERFORM ASK-TO-CONTINUE.
+    ELSE
+        DISPLAY "Error occurred during record insertion."
+    END-IF
+    PERFORM ASK-TO-CONTINUE.
 
 EDIT-RECORD-PROCESS.
     *> Get student ID to edit

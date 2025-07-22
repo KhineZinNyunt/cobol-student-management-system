@@ -265,7 +265,7 @@ DISPLAY-SORTED-RESULTS.
         DISPLAY WS-SORT-ID(IDX) "  " WS-SORT-NAME(IDX) "  "
             DISP-MARK1 "  " DISP-MARK2 "  " DISP-MARK3 "  "
             DISP-MARK4 "  " DISP-MARK5 "  " DISP-MARK6
-            "   " DISP-TOTAL-MARK "    " WS-SORT-GRADE(IDX) "  " DISP-RANK
+            "   " DISP-TOTAL-MARK "     " WS-SORT-GRADE(IDX) "   " DISP-RANK
    ELSE
        EXIT PERFORM
        END-IF

@@ -199,7 +199,7 @@
                      MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB1 (0 to 100): "
+                     DISPLAY "Enter mark for CST-11101 [Basic Data Structures]: "
                      ACCEPT WS-NEW-VALUE
 
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
@@ -222,7 +222,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -234,7 +234,7 @@
                       MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB2 (0 to 100): "
+                     DISPLAY "Enter mark for CST-11201[Calculus I] : "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -257,7 +257,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -269,7 +269,7 @@
                       MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB3 (0 to 100): "
+                     DISPLAY "Enter mark for CST-11401[Digital Fundamentals of Computer System]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -292,7 +292,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -304,7 +304,7 @@
                       MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB4 (0 to 100): "
+                     DISPLAY "Enter mark forCST-11501 [English Language Proficiency I]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -327,7 +327,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -339,7 +339,7 @@
                      MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB5 (0 to 100): "
+                     DISPLAY "Enter mark for CST-11601[Myanmar Literature]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -362,7 +362,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -374,7 +374,7 @@
                       MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB6 (0 to 100): "
+                     DISPLAY "Enter mark forCST-11701 [Physics(Mechanics)]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -397,7 +397,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -411,32 +411,30 @@
                MARK1-CST11101 + MARK1-CST11201 + MARK1-CST11401 +
                MARK1-CST11501 + MARK1-CST11601 + MARK1-CST11701
 
-           IF TOTAL-MARKS1 >= 480
-               MOVE "A+" TO GRADE1
-           ELSE IF TOTAL-MARKS1 >= 450
-               MOVE "A" TO GRADE1
-           ELSE IF TOTAL-MARKS1 >= 400
-               MOVE "B" TO GRADE1
-           ELSE
-               MOVE "C" TO GRADE1.
+          EVALUATE TRUE
+           WHEN TOTAL-MARKS1 >= 450 MOVE "A" TO GRADE1
+           WHEN TOTAL-MARKS1 >= 400 MOVE "B" TO GRADE1
+           WHEN TOTAL-MARKS1 >= 300 MOVE "C" TO GRADE1
+           WHEN OTHER MOVE "F" TO GRADE1
+       END-EVALUATE.
 
            DISPLAY "===== Edited Record ====="
        DISPLAY "ID: " STUDENT-ID1
        DISPLAY "Name: " STUDENT-NAME1
        DISPLAY "Marks: "
-       DISPLAY "  CST11101: " MARK1-CST11101
-       DISPLAY "  CST11201: " MARK1-CST11201
-       DISPLAY "  CST11401: " MARK1-CST11401
-       DISPLAY "  CST11501: " MARK1-CST11501
-       DISPLAY "  CST11601: " MARK1-CST11601
-       DISPLAY "  CST11701: " MARK1-CST11701
+       DISPLAY "  CST11101-Basic Data Structures: " MARK1-CST11101
+       DISPLAY "  CST11201-Calculus I: " MARK1-CST11201
+       DISPLAY "  CST11401-Digital Fundamentals of Computer System: " MARK1-CST11401
+       DISPLAY "  CST11501-English Language Proficiency I: " MARK1-CST11501
+       DISPLAY "  CST11601-Myanmar Literature: " MARK1-CST11601
+       DISPLAY "  CST11701-Physics(Mechanics): " MARK1-CST11701
        DISPLAY "Total: " TOTAL-MARKS1
        DISPLAY "Grade: " GRADE1
        DISPLAY "==========================".
 
        HANDLE-EDIT-SEM2.
            PERFORM UNTIL WS-EDIT-OPTION = "FINISH"
-              DISPLAY "Which field do you want to edit?(NAME,SUB1–6)"
+              DISPLAY "Which field do you want to edit?(NAME,SUB1Â–6)"
                DISPLAY "Or type FINISH to end editing."
                ACCEPT WS-EDIT-OPTION
                MOVE FUNCTION UPPER-CASE(WS-EDIT-OPTION)
@@ -485,7 +483,7 @@
                      MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB1 (0 to 100): "
+                     DISPLAY "Enter mark for CST-12101[Programming in C++]:  "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -507,7 +505,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -519,7 +517,7 @@
                      MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB2 (0 to 100): "
+                     DISPLAY "Enter mark for CST-12201[Calculus II]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -542,7 +540,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -554,7 +552,7 @@
                      MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB3 (0 to 100): "
+                     DISPLAY "Enter mark for CST-12401[Web Technology]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -577,7 +575,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -589,7 +587,7 @@
                       MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB4 (0 to 100): "
+                     DISPLAY "Enter mark for CST-12501[English Language Proficiency II]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -612,7 +610,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -624,7 +622,7 @@
                      MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB5 (0 to 100): "
+                     DISPLAY "Enter mark for CST-12601[Myanmar Literature]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -647,7 +645,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -659,7 +657,7 @@
                       MOVE SPACES TO WS-TRIMMED-MARK
                      MOVE "Y" TO WS-NUMERIC-ONLY
                      MOVE 0 TO WS-MARK-NUMERIC
-                     DISPLAY "Enter mark for SUB6 (0 to 100): "
+                     DISPLAY "Enter mark for CST-12701[Physics (Electromagnetism)]: "
                      ACCEPT WS-NEW-VALUE
                      MOVE FUNCTION TRIM(WS-NEW-VALUE) TO WS-TRIMMED-MARK
 
@@ -682,7 +680,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0–100."
+                      DISPLAY "Invalid input.Only numbers 0Â–100."
                      END-IF
 
                     END-PERFORM
@@ -697,26 +695,24 @@
                MARK2-CST12101 + MARK2-CST12201 + MARK2-CST12401 +
                MARK2-CST12501 + MARK2-CST12601 + MARK2-CST12701
 
-           IF TOTAL-MARKS2 >= 480
-               MOVE "A+" TO GRADE2
-           ELSE IF TOTAL-MARKS2 >= 450
-               MOVE "A" TO GRADE2
-           ELSE IF TOTAL-MARKS2 >= 400
-               MOVE "B" TO GRADE2
-           ELSE
-               MOVE "C" TO GRADE2.
+       EVALUATE TRUE
+           WHEN TOTAL-MARKS2 >= 450 MOVE "A" TO GRADE2
+           WHEN TOTAL-MARKS2 >= 400 MOVE "B" TO GRADE2
+           WHEN TOTAL-MARKS2 >= 300 MOVE "C" TO GRADE2
+           WHEN OTHER MOVE "F" TO GRADE2
+       END-EVALUATE.
 
 
        DISPLAY "===== Edited Record ====="
        DISPLAY "ID: " STUDENT-ID2
        DISPLAY "Name: " STUDENT-NAME2
        DISPLAY "Marks: "
-       DISPLAY "  CST12101: " MARK2-CST12101
-       DISPLAY "  CST12201: " MARK2-CST12201
-       DISPLAY "  CST12401: " MARK2-CST12401
-       DISPLAY "  CST12501: " MARK2-CST12501
-       DISPLAY "  CST12601: " MARK2-CST12601
-       DISPLAY "  CST12701: " MARK2-CST12701
+       DISPLAY "  CST12101-Programming in C++: " MARK2-CST12101
+       DISPLAY "  CST12201-CalculusII: " MARK2-CST12201
+       DISPLAY "  CST12401-Web Technology: " MARK2-CST12401
+       DISPLAY "  CST12501-English Language Proficiency II: " MARK2-CST12501
+       DISPLAY "  CST12601-Myanmar Literature: " MARK2-CST12601
+       DISPLAY "  CST12701-Physics (Electromagnetism): " MARK2-CST12701
        DISPLAY "Total: " TOTAL-MARKS2
        DISPLAY "Grade: " GRADE2
        DISPLAY "==========================".

@@ -73,7 +73,18 @@ WORKING-STORAGE SECTION.
     05 WS-TEMP-MARKS     OCCURS 6 TIMES PIC 999.
     05 WS-TEMP-TOTAL     PIC 9(4).
     05 WS-TEMP-GRADE     PIC X.
-
+01  ESCAPE-CHAR          PIC X VALUE X'1B'.
+01  COLOR-CODES.
+           05  ESC             PIC X    VALUE X'1B'.
+           05  COLOR-RESET     PIC X(3) VALUE '[0m'.
+           05  COLOR-RED       PIC X(4) VALUE '[31m'.
+           05  COLOR-GREEN     PIC X(4) VALUE '[32m'.
+           05  COLOR-YELLOW    PIC X(4) VALUE '[33m'.
+           05  COLOR-BLUE      PIC X(4) VALUE '[34m'.
+           05  COLOR-MAGENTA   PIC X(4) VALUE '[35m'.
+           05  COLOR-CYAN      PIC X(4) VALUE '[36m'.
+           05  COLOR-WHITE     PIC X(4) VALUE '[37m'.
+           05  COLOR-BOLD      PIC X(3) VALUE '[1m'.
 LINKAGE SECTION.
 01  LS-ID-SEARCH            PIC X(10).
 01  LS-SEMESTER             PIC 9.
@@ -149,5 +160,5 @@ SEARCH-RECORD.
     END-EVALUATE
 
     IF RECORD-NOT-FOUND
-        DISPLAY "Student not found in Semester " LS-SEMESTER
+        DISPLAY ESC COLOR-RED"Student not found in Semester " LS-SEMESTER ESC COLOR-RESET
     END-IF.

@@ -119,9 +119,9 @@ WORKING-STORAGE SECTION.
 PROCEDURE DIVISION.
 BEGIN.
     PERFORM UNTIL WS-NUMERIC-CHOICE = 4
-        DISPLAY ESC COLOR-CYAN "***************************"ESC COLOR-RESET
+        DISPLAY ESC COLOR-CYAN "**********************************"ESC COLOR-RESET
         DISPLAY ESC COLOR-BOLD"*Student Record Management System*"ESC COLOR-RESET
-        DISPLAY ESC COLOR-CYAN"***************************"ESC COLOR-RESET
+        DISPLAY ESC COLOR-CYAN "**********************************"ESC COLOR-RESET
         DISPLAY ESC COLOR-RED"1. "ESC COLOR-RESET "Manage Records"
         DISPLAY ESC COLOR-RED"2. "ESC COLOR-RESET "View Reports"
         DISPLAY ESC COLOR-RED"3. "ESC COLOR-RESET "Search Record"

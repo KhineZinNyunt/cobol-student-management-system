@@ -53,7 +53,7 @@ FD  SORTED-SEM2.
     05  SORTED-NAME       PIC X(30).
 
 WORKING-STORAGE SECTION.
-01  WS-STUDENT-ID          PIC X(10).
+01  WS-STUDENT-ID          PIC 9(5).
 01  WS-STUDENT-NAME        PIC X(30).
 01  WS-SEM-CHOICE          PIC 9.
 01  WS-FOUND               PIC X VALUE 'N'.
@@ -62,36 +62,63 @@ WORKING-STORAGE SECTION.
 01  WS-DUPLICATE           PIC X VALUE 'N'.
 01  WS-IO-STATUS           PIC 99.
 01  WS-TEMP-FILE           PIC X(20) VALUE 'temp_sem2.dat'.
+01  WS-VALID-ID            PIC X VALUE 'N'.
+01  WS-INPUT-ID            PIC X(10).
 
 PROCEDURE DIVISION.
 MAIN-LOGIC.
     PERFORM GET-SEM-CHOICE
     PERFORM GET-STUDENT-ID
-    EVALUATE WS-SEM-CHOICE
-        WHEN 1 PERFORM REGISTER-SEM1
-        WHEN 2 PERFORM REGISTER-SEM2
-        WHEN OTHER DISPLAY "Invalid choice. Please select 1 or 2."
-    END-EVALUATE
+    IF WS-VALID-ID = 'Y'
+        EVALUATE WS-SEM-CHOICE
+            WHEN 1 PERFORM REGISTER-SEM1
+            WHEN 2 PERFORM REGISTER-SEM2
+            WHEN OTHER DISPLAY "Invalid choice. Please select 1 or 2."
+        END-EVALUATE
+    ELSE
+        DISPLAY "Registration aborted due to invalid ID."
+    END-IF
     STOP RUN.
 
 GET-SEM-CHOICE.
-    DISPLAY "Select semester to register for:"
-    DISPLAY "1. SEM1 (New registration)"
-    DISPLAY "2. SEM2 (Must have passed SEM1)"
-    ACCEPT WS-SEM-CHOICE.
+    PERFORM WITH TEST AFTER UNTIL WS-SEM-CHOICE = 1 OR WS-SEM-CHOICE = 2
+        DISPLAY " "
+        DISPLAY "Select semester to register for:"
+        DISPLAY "1. SEM1 (New registration)"
+        DISPLAY "2. SEM2"
+        DISPLAY "Enter your choice (1 or 2): "
+        ACCEPT WS-SEM-CHOICE
+        IF WS-SEM-CHOICE NOT = 1 AND WS-SEM-CHOICE NOT = 2
+            DISPLAY "Invalid choice. Please enter 1 or 2."
+        END-IF
+    END-PERFORM.
 
 GET-STUDENT-ID.
-    DISPLAY "Enter Student ID: "
-    ACCEPT WS-STUDENT-ID.
+    PERFORM WITH TEST AFTER UNTIL WS-VALID-ID = 'Y'
+        DISPLAY "Enter Student ID (5 digits): "
+        ACCEPT WS-INPUT-ID
+        *> Trim any trailing spaces
+        INSPECT WS-INPUT-ID TALLYING WS-IO-STATUS FOR LEADING SPACES
+        *> Check if exactly 5 numeric digits
+        IF FUNCTION LENGTH(FUNCTION TRIM(WS-INPUT-ID)) = 5 AND
+           FUNCTION TRIM(WS-INPUT-ID) IS NUMERIC
+            MOVE FUNCTION TRIM(WS-INPUT-ID) TO WS-STUDENT-ID
+            MOVE 'Y' TO WS-VALID-ID
+        ELSE
+            DISPLAY "Invalid ID. Must be exactly 5 digits (0-9)."
+            DISPLAY "You entered: '" WS-INPUT-ID "'"
+            MOVE 'N' TO WS-VALID-ID
+        END-IF
+    END-PERFORM.
 
 GET-STUDENT-NAME.
     DISPLAY "Enter Student Name: "
     ACCEPT WS-STUDENT-NAME.
 
 REGISTER-SEM1.
-    PERFORM GET-STUDENT-NAME  *> Added this line to request name for SEM1
     PERFORM CHECK-DUPLICATE-SEM1
     IF WS-DUPLICATE = 'N'
+        PERFORM GET-STUDENT-NAME
         OPEN EXTEND SEM1-FILE
         MOVE WS-STUDENT-ID TO STUDENT-ID1
         MOVE WS-STUDENT-NAME TO STUDENT-NAME1

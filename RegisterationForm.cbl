@@ -168,6 +168,7 @@ CHECK-ELIGIBILITY-FOR-SEM2.
         OPEN INPUT SEM1-FILE
         MOVE 'N' TO WS-FOUND
         MOVE 'Y' TO WS-MORE-DATA
+        MOVE 'N' TO WS-DUPLICATE *> Initialize this flag
 
         PERFORM UNTIL WS-MORE-DATA = 'N'
             READ SEM1-FILE
@@ -176,7 +177,7 @@ CHECK-ELIGIBILITY-FOR-SEM2.
                 NOT AT END
                     IF STUDENT-ID1 = WS-STUDENT-ID
                         MOVE 'Y' TO WS-FOUND
-                        MOVE STUDENT-NAME1 TO WS-STUDENT-NAME *> Store the name from SEM1
+                        MOVE STUDENT-NAME1 TO WS-STUDENT-NAME
                         EVALUATE GRADE1
                             WHEN "A" WHEN "B" WHEN "C"
                                 DISPLAY "Student eligible for SEM2: " STUDENT-NAME1
@@ -184,14 +185,15 @@ CHECK-ELIGIBILITY-FOR-SEM2.
                                 DISPLAY "Registration Failed for: " STUDENT-NAME1
                                 DISPLAY "Reason: Grade " GRADE1 " is not passing"
                                 MOVE 'N' TO WS-FOUND
+                                MOVE 'Y' TO WS-DUPLICATE *> Use this flag to prevent the "not in records" message
                         END-EVALUATE
                         MOVE 'N' TO WS-MORE-DATA
                     END-IF
             END-READ
         END-PERFORM
 
-        IF WS-FOUND = 'N'
-            DISPLAY "Student ID " WS-STUDENT-ID " not found in SEM1 records."
+        IF WS-FOUND = 'N' AND WS-DUPLICATE = 'N'
+            DISPLAY "Student ID " WS-STUDENT-ID " is not in SEM1 records."
         END-IF
 
         CLOSE SEM1-FILE

@@ -222,7 +222,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -257,7 +257,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -292,7 +292,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -327,7 +327,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -362,7 +362,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -397,7 +397,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -434,7 +434,7 @@
 
        HANDLE-EDIT-SEM2.
            PERFORM UNTIL WS-EDIT-OPTION = "FINISH"
-              DISPLAY "Which field do you want to edit?(NAME,SUB1Â–6)"
+              DISPLAY "Which field do you want to edit?(NAME,SUB1 to 6)"
                DISPLAY "Or type FINISH to end editing."
                ACCEPT WS-EDIT-OPTION
                MOVE FUNCTION UPPER-CASE(WS-EDIT-OPTION)
@@ -505,7 +505,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -540,7 +540,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -575,7 +575,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -610,7 +610,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -645,7 +645,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM
@@ -680,7 +680,7 @@
                         DISPLAY "Mark must be between 0 and 100."
                        END-IF
                        ELSE
-                      DISPLAY "Invalid input.Only numbers 0Â–100."
+                      DISPLAY "Invalid input.Only numbers between 0 and 100."
                      END-IF
 
                     END-PERFORM

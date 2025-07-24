@@ -92,14 +92,17 @@ IDENTIFICATION DIVISION.
            CLOSE RANKED-RESULTS-SEM2
 
            IF STUDENT-IN-SEM1 OR STUDENT-IN-SEM2
-               DISPLAY "Student found in semester(s): "
-               IF STUDENT-IN-SEM1
-                   DISPLAY "1 , "with no ADVANCING
-               END-IF
-               IF STUDENT-IN-SEM2
-                   DISPLAY "2 "
-               END-IF
-               DISPLAY "Select semester to view (1 or 2): "
+               DISPLAY "Student found in semester(s): " WITH NO ADVANCING
+
+               EVALUATE TRUE
+                 WHEN STUDENT-IN-SEM1 AND STUDENT-IN-SEM2
+                 DISPLAY "1, 2"
+                 WHEN STUDENT-IN-SEM1
+                 DISPLAY "1"
+                 WHEN STUDENT-IN-SEM2
+                 DISPLAY "2"
+               END-EVALUATE
+               DISPLAY "Select semester to view : "
                ACCEPT WS-SEMESTER-CHOICE
 
                EVALUATE WS-SEMESTER-CHOICE

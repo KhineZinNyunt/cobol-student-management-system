@@ -113,6 +113,10 @@ MAIN-LOGIC.
         END-IF
         DISPLAY "Do you want to continue? (Y/N): "
         ACCEPT WS-CONTINUE
+        *> Convert input to uppercase
+        IF WS-CONTINUE = 'n' OR 'y'
+            MOVE FUNCTION UPPER-CASE(WS-CONTINUE) TO WS-CONTINUE
+        END-IF
     END-PERFORM
     STOP RUN.
 

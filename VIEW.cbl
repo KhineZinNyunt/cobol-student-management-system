@@ -270,6 +270,23 @@ DISPLAY-SORTED-RESULTS.
        EXIT PERFORM
        END-IF
    END-PERFORM.
+       IF WS-SEMESTER =1
+           DISPLAY "SUBJECT CODE EXPLANATION (SEMESTER I)"
+                           DISPLAY "11101 - Basic Data Structures"
+                           DISPLAY "11201 - Calculus I"
+                           DISPLAY "11401 - Digital Fundamentals of Computer System"
+                           DISPLAY "11501 - English Language Proficiency I"
+                           DISPLAY "11601 - Myanmar Literature"
+                           DISPLAY "11701 - Physics (Mechanics)"
+      ELSE
+          DISPLAY "SUBJECT CODE EXPLANATION (SEMESTER II)"
+                           DISPLAY "12102 - Programming in C++"
+                           DISPLAY "12201 - Calculus II"
+                           DISPLAY "12301 - Web Technology"
+                           DISPLAY "12502 - English Language Proficiency II"
+                           DISPLAY "12601 - Myanmar Literature"
+                           DISPLAY "12702 - Physics (Electromagnetism)"
+    END-IF.
 STORE-RANKED-RESULTS-SEM1.
     OPEN OUTPUT RANKED-RESULTS-SEM1
     PERFORM VARYING IDX FROM 1 BY 1 UNTIL IDX > WS-STUDENT-COUNT

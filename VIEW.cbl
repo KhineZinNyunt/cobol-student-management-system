@@ -206,14 +206,32 @@ CALCULATE-GRADE.
 
 SORT-STUDENTS.
     IF WS-STUDENT-COUNT > 1
+       IF WS-SORT-GRADE(IDX) NOT = "F"
+
         PERFORM VARYING IDX FROM 1 BY 1 UNTIL IDX >= WS-STUDENT-COUNT
             COMPUTE IDY = IDX + 1
             PERFORM VARYING IDY FROM IDY BY 1 UNTIL IDY > WS-STUDENT-COUNT
+             IF WS-SORT-GRADE(IDX) = "F" AND WS-SORT-GRADE(IDY) NOT = "F"
+
+                PERFORM SWAP-STUDENTS
+
+            ELSE IF WS-SORT-GRADE(IDX) = "F" AND WS-SORT-GRADE(IDY) = "F"
+
                 IF WS-SORT-TOTAL(IDX) < WS-SORT-TOTAL(IDY)
                     PERFORM SWAP-STUDENTS
                 END-IF
-            END-PERFORM
+
+            ELSE IF WS-SORT-GRADE(IDX) NOT = "F" AND WS-SORT-GRADE(IDY) NOT = "F"
+
+                IF WS-SORT-TOTAL(IDX) < WS-SORT-TOTAL(IDY)
+                    PERFORM SWAP-STUDENTS
+                END-IF
+
+            END-IF
         END-PERFORM
+        END-PERFORM
+       END-IF
+
     END-IF.
 
 SWAP-STUDENTS.

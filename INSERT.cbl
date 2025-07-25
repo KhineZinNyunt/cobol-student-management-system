@@ -81,7 +81,7 @@ WORKING-STORAGE SECTION.
 01 FILE-STATUS-SEM1        PIC XX.
 01 FILE-STATUS-SEM2        PIC XX.
 01 FILE-STATUS-TEMP        PIC XX.
-
+01 WS-CHOICE          PIC X(3).
 01 DISPLAY-LINE.
    05 FILLER               PIC X(10) VALUE "ID: ".
    05 DL-ID                PIC X(10).
@@ -140,10 +140,14 @@ LINKAGE SECTION.
 PROCEDURE DIVISION  USING LS-SEMESTER.
 MAIN-LOGIC.
     MOVE LS-SEMESTER TO WS-SEMESTER.
+    *> Remove the GET-SEMESTER call since we already have the semester from MAINFRAME
+    *> Just validate it's correct
     IF WS-SEMESTER NOT = 1 AND WS-SEMESTER NOT = 2
         DISPLAY "Invalid semester. Only 1 or 2 allowed."
-        PERFORM GET-SEMESTER
+        MOVE 1 TO RETURN-CODE  *> Set error code
+        GOBACK
     END-IF.
+
     PERFORM SEARCH-STUDENT
     IF WS-STUDENT-FOUND = 'Y'
         PERFORM ACCEPT-MARKS
@@ -166,11 +170,89 @@ GET-SEMESTER.
 
 
 
+*> SEARCH-STUDENT.
+    *> PERFORM UNTIL WS-STUDENT-FOUND = 'Y'
+        *> *> Request student ID input
+        *> DISPLAY "Enter Student ID to search: "
+        *> ACCEPT WS-STUDENT-ID
+
+        *> MOVE 'N' TO WS-STUDENT-FOUND
+        *> SET FILE-NOT-END TO TRUE
+
+        *> IF WS-SEMESTER = 1
+            *> *> Search in Semester 1 file
+            *> OPEN INPUT STUDENT-FILE-SEM1
+            *> IF FILE-STATUS-SEM1 NOT = "00"
+                *> DISPLAY "Error opening semester 1 file. Status: " FILE-STATUS-SEM1
+                *> STOP RUN
+            *> END-IF
+
+            *> PERFORM UNTIL FILE-END
+                *> READ STUDENT-FILE-SEM1
+                    *> AT END
+                        *> SET FILE-END TO TRUE
+                    *> NOT AT END
+                        *> IF STUDENT-ID1 = WS-STUDENT-ID  *> Fixed variable name from STUDENT-ID2
+                            *> MOVE 'Y' TO WS-STUDENT-FOUND
+                            *> MOVE STUDENT-NAME1 TO WS-STUDENT-NAME
+                            *> DISPLAY "Student found: " STUDENT-NAME1
+                            *> SET FILE-END TO TRUE
+                        *> END-IF
+                *> END-READ
+            *> END-PERFORM
+
+            *> IF WS-STUDENT-FOUND = 'N'
+                *> DISPLAY "Student ID " WS-STUDENT-ID " not found in Semester 1."
+                *> DISPLAY "Please try again."
+            *> END-IF
+
+            *> CLOSE STUDENT-FILE-SEM1
+        *> ELSE
+            *> *> Search in Semester 2 file
+            *> OPEN INPUT STUDENT-FILE-SEM2
+            *> IF FILE-STATUS-SEM2 NOT = "00"
+                *> DISPLAY "Error opening semester 2 file. Status: " FILE-STATUS-SEM2
+                *> STOP RUN
+            *> END-IF
+
+            *> PERFORM UNTIL FILE-END
+                *> READ STUDENT-FILE-SEM2
+                    *> AT END
+                        *> SET FILE-END TO TRUE
+                    *> NOT AT END
+                        *> IF STUDENT-ID2 = WS-STUDENT-ID
+                            *> MOVE 'Y' TO WS-STUDENT-FOUND
+                            *> MOVE STUDENT-NAME2 TO WS-STUDENT-NAME
+                            *> DISPLAY "Student found: " STUDENT-NAME2
+                            *> SET FILE-END TO TRUE
+                        *> END-IF
+                *> END-READ
+            *> END-PERFORM
+
+            *> IF WS-STUDENT-FOUND = 'N'
+                *> DISPLAY "Student ID " WS-STUDENT-ID " not found in Semester 2."
+                *> DISPLAY "Please try again."
+            *> END-IF
+
+            *> CLOSE STUDENT-FILE-SEM2
+        *> END-IF
+    *> END-PERFORM.
+
 SEARCH-STUDENT.
+    *> Reset found flag at start
+    MOVE 'N' TO WS-STUDENT-FOUND
+
     PERFORM UNTIL WS-STUDENT-FOUND = 'Y'
         *> Request student ID input
         DISPLAY "Enter Student ID to search: "
         ACCEPT WS-STUDENT-ID
+
+        *> Validate ID format (add this validation)
+        IF FUNCTION LENGTH(FUNCTION TRIM(WS-STUDENT-ID)) = 0
+            DISPLAY "Student ID cannot be empty"
+            PERFORM CONTINUE-PROMPT
+            GO TO SEARCH-STUDENT
+        END-IF
 
         MOVE 'N' TO WS-STUDENT-FOUND
         SET FILE-NOT-END TO TRUE
@@ -188,7 +270,7 @@ SEARCH-STUDENT.
                     AT END
                         SET FILE-END TO TRUE
                     NOT AT END
-                        IF STUDENT-ID1 = WS-STUDENT-ID  *> Fixed variable name from STUDENT-ID2
+                        IF STUDENT-ID1 = WS-STUDENT-ID
                             MOVE 'Y' TO WS-STUDENT-FOUND
                             MOVE STUDENT-NAME1 TO WS-STUDENT-NAME
                             DISPLAY "Student found: " STUDENT-NAME1
@@ -196,11 +278,6 @@ SEARCH-STUDENT.
                         END-IF
                 END-READ
             END-PERFORM
-
-            IF WS-STUDENT-FOUND = 'N'
-                DISPLAY "Student ID " WS-STUDENT-ID " not found in Semester 1."
-                DISPLAY "Please try again."
-            END-IF
 
             CLOSE STUDENT-FILE-SEM1
         ELSE
@@ -225,15 +302,18 @@ SEARCH-STUDENT.
                 END-READ
             END-PERFORM
 
-            IF WS-STUDENT-FOUND = 'N'
-                DISPLAY "Student ID " WS-STUDENT-ID " not found in Semester 2."
-                DISPLAY "Please try again."
-            END-IF
-
             CLOSE STUDENT-FILE-SEM2
         END-IF
-    END-PERFORM.
 
+        IF WS-STUDENT-FOUND = 'N'
+            DISPLAY "Student ID " WS-STUDENT-ID " not found in Semester " WS-SEMESTER
+            DISPLAY "Do you want to try again? (Y/N): "
+            ACCEPT WS-CHOICE
+            IF WS-CHOICE = 'N' OR WS-CHOICE = 'n'
+                EXIT PERFORM
+            END-IF
+        END-IF
+    END-PERFORM.
 
 ACCEPT-MARKS.
 
@@ -379,7 +459,9 @@ FORMAT-RECORD-LINE.
         WS-FORMATTED-TOTAL DELIMITED BY SIZE
         WS-FORMATTED-GRADE DELIMITED BY SIZE
         INTO WS-FINAL-RECORD-LINE.
-
+CONTINUE-PROMPT.
+    DISPLAY "Press Enter to continue..."
+    ACCEPT WS-CHOICE.
 UPDATE-STUDENT-RECORD.
     *> Open temp file for writing
     OPEN OUTPUT TEMP-STUDENT-FILE

@@ -192,25 +192,151 @@ LOAD-SEM2-DATA.
     END-PERFORM
     CLOSE STUDENT-FILE-SEM2.
 
+*> CALCULATE-GRADE.
+    *> If WS-SEMESTER=1
+  *> IF MARK1-CST11101 < 40 OR
+   *> MARK1-CST11201 < 40 OR
+   *> MARK1-CST11401 < 40 OR
+   *> MARK1-CST11501 < 40 OR
+   *> MARK1-CST11601 < 40 OR
+   *> MARK1-CST11701 < 40
+   *> MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+  *> ELSE
+    *> EVALUATE TRUE
+        *> WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 450
+            *> MOVE "A" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+        *> WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 400
+            *> MOVE "B" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+        *> WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 300
+            *> MOVE "C" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+        *> WHEN OTHER
+            *> MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+    *> END-EVALUATE
+  *> END-IF
+  *> ELSE
+      *> IF MARK2-CST12101 < 40 OR
+        *> MARK2-CST12201 < 40 OR
+        *> MARK2-CST12401 < 40 OR
+        *> MARK2-CST12501 < 40 OR
+        *> MARK2-CST12601 < 40 OR
+        *> MARK2-CST12701 < 40
+        *> MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+  *> ELSE
+    *> EVALUATE TRUE
+        *> WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 450
+            *> MOVE "A" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+        *> WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 400
+            *> MOVE "B" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+        *> WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 300
+            *> MOVE "C" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+        *> WHEN OTHER
+            *> MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+    *> END-EVALUATE
+  *> END-IF
+ *> END-IF.
+
 CALCULATE-GRADE.
-    EVALUATE TRUE
-        WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 450
-            MOVE "A" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
-        WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 400
-            MOVE "B" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
-        WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 300
-            MOVE "C" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
-        WHEN OTHER
-            MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
-    END-EVALUATE.
+    IF WS-SEMESTER = 1
+
+        IF MARK1-CST11101 < 40 OR
+           MARK1-CST11201 < 40 OR
+           MARK1-CST11401 < 40 OR
+           MARK1-CST11501 < 40 OR
+           MARK1-CST11601 < 40 OR
+           MARK1-CST11701 < 40
+           MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+        ELSE
+
+            EVALUATE TRUE
+                WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 450
+                    MOVE "A" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+                WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 400
+                    MOVE "B" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+                WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 300
+                    MOVE "C" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+                WHEN OTHER
+                    MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+            END-EVALUATE
+        END-IF
+    ELSE
+
+        IF MARK2-CST12101 < 40 OR
+           MARK2-CST12201 < 40 OR
+           MARK2-CST12401 < 40 OR
+           MARK2-CST12501 < 40 OR
+           MARK2-CST12601 < 40 OR
+           MARK2-CST12701 < 40
+           MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+        ELSE
+            EVALUATE TRUE
+                WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 450
+                    MOVE "A" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+                WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 400
+                    MOVE "B" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+                WHEN WS-SORT-TOTAL(WS-STUDENT-COUNT) >= 300
+                    MOVE "C" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+                WHEN OTHER
+                    MOVE "F" TO WS-SORT-GRADE(WS-STUDENT-COUNT)
+            END-EVALUATE
+        END-IF
+    END-IF.
+
+*> SORT-STUDENTS.
+    *> IF WS-STUDENT-COUNT > 1
+       *> IF WS-SORT-GRADE(IDX) NOT = "F"
+
+        *> PERFORM VARYING IDX FROM 1 BY 1 UNTIL IDX >= WS-STUDENT-COUNT
+            *> COMPUTE IDY = IDX + 1
+            *> PERFORM VARYING IDY FROM IDY BY 1 UNTIL IDY > WS-STUDENT-COUNT
+             *> IF WS-SORT-GRADE(IDX) = "F" AND WS-SORT-GRADE(IDY) NOT = "F"
+
+                *> PERFORM SWAP-STUDENTS
+
+            *> ELSE IF WS-SORT-GRADE(IDX) = "F" AND WS-SORT-GRADE(IDY) = "F"
+
+                *> IF WS-SORT-TOTAL(IDX) < WS-SORT-TOTAL(IDY)
+                    *> PERFORM SWAP-STUDENTS
+                *> END-IF
+
+            *> ELSE IF WS-SORT-GRADE(IDX) NOT = "F" AND WS-SORT-GRADE(IDY) NOT = "F"
+
+                *> IF WS-SORT-TOTAL(IDX) < WS-SORT-TOTAL(IDY)
+                    *> PERFORM SWAP-STUDENTS
+                *> END-IF
+
+            *> END-IF
+        *> END-PERFORM
+        *> END-PERFORM
+       *> END-IF
+
+    *> END-IF.
 
 SORT-STUDENTS.
     IF WS-STUDENT-COUNT > 1
         PERFORM VARYING IDX FROM 1 BY 1 UNTIL IDX >= WS-STUDENT-COUNT
             COMPUTE IDY = IDX + 1
             PERFORM VARYING IDY FROM IDY BY 1 UNTIL IDY > WS-STUDENT-COUNT
-                IF WS-SORT-TOTAL(IDX) < WS-SORT-TOTAL(IDY)
+
+                IF (WS-SORT-GRADE(IDX) = "F" AND WS-SORT-GRADE(IDY) NOT = "F")
+
                     PERFORM SWAP-STUDENTS
+                ELSE IF (WS-SORT-GRADE(IDX) NOT = "F" AND WS-SORT-GRADE(IDY) NOT = "F")
+
+                    IF (WS-SORT-GRADE(IDX) = "B" AND WS-SORT-GRADE(IDY) = "A") OR
+                       (WS-SORT-GRADE(IDX) = "C" AND WS-SORT-GRADE(IDY) = "A") OR
+                       (WS-SORT-GRADE(IDX) = "C" AND WS-SORT-GRADE(IDY) = "B")
+                        PERFORM SWAP-STUDENTS
+                    ELSE IF WS-SORT-GRADE(IDX) = WS-SORT-GRADE(IDY)
+
+                        IF WS-SORT-TOTAL(IDX) < WS-SORT-TOTAL(IDY)
+                            PERFORM SWAP-STUDENTS
+                        END-IF
+                    END-IF
+                ELSE IF (WS-SORT-GRADE(IDX) = "F" AND WS-SORT-GRADE(IDY) = "F")
+
+                    IF WS-SORT-TOTAL(IDX) < WS-SORT-TOTAL(IDY)
+                        PERFORM SWAP-STUDENTS
+                    END-IF
                 END-IF
             END-PERFORM
         END-PERFORM

@@ -221,8 +221,38 @@ VALIDATE-MANAGE-CHOICE.
         END-IF
     END-IF.
 
-ADD-RECORD.
-        CALL "INSERT" USING WS-SEMESTER
+*> ADD-RECORD.
+        *> CALL "INSERT" USING WS-SEMESTER
+    *> IF RETURN-CODE = 0
+        *> DISPLAY "Record added successfully."
+        *> DISPLAY "Displaying updated records..."
+        *> CALL "VIEW" USING WS-SEMESTER
+    *> ELSE
+        *> DISPLAY "Error occurred during record insertion."
+    *> END-IF
+    *> PERFORM ASK-TO-CONTINUE.
+
+    *> ADD-RECORD.
+    *> *> Reset semester validation flag
+    *> MOVE 'N' TO WS-VALID-SEMESTER
+    *> PERFORM VALIDATE-SEMESTER-INPUT
+
+    *> IF IS-VALID-SEMESTER
+        *> CALL "INSERT" USING WS-SEMESTER
+        *> IF RETURN-CODE = 0
+            *> DISPLAY "Record added successfully."
+            *> DISPLAY "Displaying updated records..."
+            *> CALL "VIEW" USING WS-SEMESTER
+        *> ELSE
+            *> DISPLAY "Error occurred during record insertion."
+        *> END-IF
+    *> ELSE
+        *> DISPLAY "Invalid semester selection."
+    *> END-IF
+    *> PERFORM ASK-TO-CONTINUE.
+ ADD-RECORD.
+    *> Remove the semester validation here since INSERT.cbl will handle it
+    CALL "INSERT" USING WS-SEMESTER
     IF RETURN-CODE = 0
         DISPLAY "Record added successfully."
         DISPLAY "Displaying updated records..."
@@ -284,9 +314,22 @@ VALIDATE-SEMESTER-INPUT.
     IF WS-SEMESTER = 1 OR WS-SEMESTER = 2
         MOVE 'Y' TO WS-VALID-SEMESTER
     END-IF.
+*> ASK-TO-CONTINUE.
+    *> DISPLAY "Do you want to continue? (Y/N): "
+    *> ACCEPT WS-CHOICE
+    *> IF WS-CHOICE = 'N' OR WS-CHOICE = 'n'
+        *> MOVE 4 TO WS-NUMERIC-CHOICE
+    *> END-IF.
 ASK-TO-CONTINUE.
     DISPLAY "Do you want to continue? (Y/N): "
     ACCEPT WS-CHOICE
     IF WS-CHOICE = 'N' OR WS-CHOICE = 'n'
         MOVE 4 TO WS-NUMERIC-CHOICE
+    ELSE
+        *> Reset relevant flags for next operation
+        MOVE 'N' TO WS-VALID-MANAGE
+        MOVE 'N' TO WS-VALID-SEMESTER
+        MOVE 'N' TO WS-EDIT-RETURN-CODE
+        MOVE 'N' TO WS-DELETED
+        MOVE 'N' TO WS-FOUND
     END-IF.
